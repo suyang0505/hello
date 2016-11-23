@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>幻灯片</title>
+<style>
+*{margin:0;padding:0;}
+ol,ul{list-style:none;}
+img{font-size: 0;}
+a{text-decoration: none;}
+#box{width:400px;height:260px;border:1px solid #000000;margin:20px auto;position: relative;overflow:hidden;}
+.slide .prev{position: absolute;display:block;font-size:50px;color:#ccc;z-index: 2;}
+#prevBtn{left:0;top:120px;}
+#nextBtn{right:0;top:120px;}
+ol{position: absolute;right:10px;bottom:5px;z-index: 2;}
+ol li{float:left;padding:0 10px;border:1px solid #ccc;margin:3px;}
+.ac{background:red;}
+ul{position:absolute;left:0;}
+ul li{float:left;width:400px;}
+</style>
+<script src="js/hxsd_tools.js" type="text/javascript"></script>
+
+<script>
+documentReady(function(){
+    //var oDiv=hxsd_tools.getByClass(document,'slide')[0];
+    function slide(obj,showBtnNum){
+        var ol=obj.getElementsByTagName('ol')[0];
+        var oUl=obj.getElementsByTagName('ul')[0];
+        var aLi=oUl.children;
+        var n=0;
+        //UL设定宽度，让li横排；
+        var li_w=hxsd_tools.getStyle(aLi[0],'width');
+
+        oUl.style.width=li_w*aLi.length+'px';
+
+
+        //---增加按钮------------------------------
+        for(var i=0;i<aLi.length;i++){
+            var li=document.createElement('li');
+            if(showBtnNum) li.innerHTML=i+1;
+            ol.appendChild(li);
+        }
+        var aBtn=ol.children;
+        aBtn[0].className='ac';
+        //------------------------------------
+
+        function run(n){
+            for(var j=0;j<aBtn.length;j++){
+                aBtn[j].className='';
+            }
+            aBtn[n].className='ac';
+
+        }
+
+
+        //-按钮增加事件，点击切换class--------
+        for(var i=0; i<aBtn.length;i++){
+            aBtn[i].index=i;
+            aBtn[i].onclick=function(){
+
+                run(this.index);
+
+                n=this.index;
+                hxsd_tools.animate(oUl,{'left':-this.index*li_w});
+                // console.log(oUl.style.left)
+            };
+
+            //---左右按钮-------------------------------
+            var prevBtn=document.getElementById('prevBtn');
+            var nextBtn=document.getElementById('nextBtn');
+
+            prevBtn.onclick=function(){
+                n--;
+                if(n<0) n=0;
+                hxsd_tools.animate(oUl,{'left':-n*li_w})  //移动
+                run(n)
+
+            }
+
+
+            nextBtn.onclick=function(){
+                n++;
+                if(n>4) n=4;
+                hxsd_tools.animate(oUl,{'left':-n*li_w})  //移动
+
+                run(n)
+            }
+
+
+        }
+
+
+    }
+
+
+    var oDiv=document.getElementById('box')
+        slide(oDiv)
+
+})
+</script>
+</head>
+<body>
+    <div class="slide" id="box">
+        <a id="prevBtn" href="javascript:;" class="moveBtn prev">&laquo;</a>
+        <a id="nextBtn" href="javascript:;" class="moveBtn prev">&raquo;</a>
+
+        <ol>
+            <!--<li class="ac">1</li>-->
+            <!--<li>2</li>-->
+            <!--<li>3</li>-->
+            <!--<li>4</li>-->
+            <!--<li>5</li>-->
+        </ol>
+
+        <ul>
+            <li><a href="javascript:;"><img src="image/01.jpg"></a></li>
+            <li><a href="javascript:;"><img src="image/02.jpg"></a></li>
+            <li><a href="javascript:;"><img src="image/03.jpg"></a></li>
+            <li><a href="javascript:;"><img src="image/04.jpg"></a></li>
+            <li><a href="javascript:;"><img src="image/05.jpg"></a></li>
+
+        </ul>
+
+
+
+
+
+    </div>
+</body>
+</html>
